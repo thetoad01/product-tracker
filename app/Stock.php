@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Http;
 
 class Stock extends Model
 {
@@ -17,17 +16,15 @@ class Stock extends Model
 
     public function track()
     {
-        if ($this->retailer->name === 'Best Buy') {
-            // hit an API endpoint for the associated retailer
-            // fetch the up-to-date details for the item
-            $results = Http::get('http://foo.text')->json();
+        $status = $this->retailer
+            ->client()
+            ->checkAvailability($this);
 
-            // and then refresh the current stock record
-            $this->update([
-                'in_stock' => $results['available'],
-                'price' => $results['price'],
-            ]);
-        }
+        // update database
+        $this->update([
+            'in_stock' => $status->available,
+            'price' => $status->price,
+        ]);
     }
 
     public function retailer()
