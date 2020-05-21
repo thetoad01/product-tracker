@@ -34,14 +34,7 @@ class TrackCommandTest extends TestCase
 
         $bestBuy->addStock($switch, $stock);
 
-        $this->assertFalse($stock->in_stock);
-
-        Http::fake(function () {
-            return [
-                'available' => true,
-                'price' => 29900
-            ];
-        });
+        Http::fake(fn() => ['available' => true, 'price' => 29900]);
 
         $this->artisan('track');
 

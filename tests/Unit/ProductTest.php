@@ -9,7 +9,7 @@ use App\Retailer;
 use App\Product;
 use App\Stock;
 
-class ExampleTest extends TestCase
+class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
