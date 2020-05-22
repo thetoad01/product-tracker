@@ -13,7 +13,7 @@ class StockStatus
      * @param $available
      * @param $price
      */
-    public function __construct($available, $price)
+    public function __construct(bool $available, int $price)
     {
         $this->available = $available;
         $this->price = $price;

@@ -2,42 +2,30 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-
-use Illuminate\Support\Facades\Http;
-
-use App\Retailer;
 use App\Product;
-use App\Stock;
+use Tests\TestCase;
+use App\Clients\StockStatus;
+use RetailerWithProduct;
+use Facades\App\Clients\ClientFactory;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class TrackCommandTest extends TestCase
 {
     use RefreshDatabase;
 
     /** @test */
-    public function it_tracks_product_stock()
+    function it_tracks_product_stock()
     {
-        $switch = Product::create(['name' => 'Nintendo Switch']);
+        $this->seed(RetailerWithProduct::class);
 
-        $bestBuy = Retailer::create(['name' => 'Best Buy']);
+        $this->assertFalse(Product::first()->inStock());
 
-        $this->assertFalse($switch->inStock());
+        ClientFactory::shouldReceive('make->checkAvailability')
+            ->andReturn(new StockStatus($available = true, $price = 29900));
 
-        $stock = new Stock([
-            'price' => 10000,
-            'url' => 'http://foo.com',
-            'sku' => '12345',
-            'in_stock' => false
-        ]);
+        $this->artisan('track')
+            ->expectsOutput('All done!');
 
-        $bestBuy->addStock($switch, $stock);
-
-        Http::fake(fn() => ['available' => true, 'price' => 29900]);
-
-        $this->artisan('track');
-
-        $this->assertTrue($stock->fresh()->in_stock);
+        $this->assertTrue(Product::first()->inStock());
     }
 }
