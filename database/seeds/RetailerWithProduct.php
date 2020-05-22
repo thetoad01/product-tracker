@@ -22,7 +22,7 @@ class RetailerWithProduct extends Seeder
         $stock = new Stock([
             'price' => 10000,
             'url' => 'http://foo.com',
-            'sku' => '12345',
+            'sku' => '6364253',
             'in_stock' => false
         ]);
 
