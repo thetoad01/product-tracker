@@ -6,7 +6,10 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 use RetailerWithProduct;
+use App\Clients\Client;
 use App\Clients\ClientException;
+use App\Clients\StockStatus;
+use Facades\App\Clients\ClientFactory;
 use App\Retailer;
 use App\Stock;
 
@@ -27,5 +30,25 @@ class StockTest extends TestCase
 
         // IF I track that stock
         Stock::first()->track();
+    }
+
+    /** @test */
+    function it_updates_local_status_after_being_tracked()
+    {
+        $this->seed(RetailerWithProduct::class);
+
+        ClientFactory::shouldReceive('make')->andReturn(new class implements Client
+            {
+                public function checkAvailability(Stock $stock): StockStatus
+                {
+                    return new StockStatus($available = true, $price = 9900);
+                }
+            }
+        );
+
+        $stock = tap(Stock::first())->track();
+
+        $this->assertTrue($stock->in_stock);
+        $this->assertEquals(9900, $stock->price);
     }
 }
