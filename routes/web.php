@@ -22,3 +22,7 @@ Route::get('/mail-preview', function () {
 
     return (new ImportantStockUpdate(Stock::first()))->toMail($user);
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
