@@ -2,6 +2,9 @@
 
 Site that tracks the availability and price of certain products across multiple retailers.
 
+# Setup
+Get an API key from https://developer.bestbuy.com/
+
 ## Made with Laravel
 
 ## Laravel Security Vulnerabilities
