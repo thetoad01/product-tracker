@@ -10933,3 +10933,7 @@ a.text-dark:focus {
   }
 }
 
+.hoverable:hover {
+  font-weight: bold;
+}
+

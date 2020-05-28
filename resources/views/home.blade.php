@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
+<div class="container py-4">
     <div class="card">
         <div class="card-header">Dashboard</div>
 
@@ -12,7 +12,25 @@
                 </div>
             @endif
 
-            You are logged in!
+            <h4 class="text-center">What do you want to do now?</h4>
+
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('retailer.index') }}">View Retailers</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Add Retailer</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">View Products</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Add Product</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">View Product History</a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
