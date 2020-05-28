@@ -4,10 +4,9 @@ namespace Tests\Feature;
 
 use App\Product;
 use Tests\TestCase;
-use App\Clients\StockStatus;
-use RetailerWithProduct;
-use Facades\App\Clients\ClientFactory;
+use RetailerWithProductSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 
 class TrackCommandTest extends TestCase
 {
@@ -16,15 +15,15 @@ class TrackCommandTest extends TestCase
     /** @test */
     function it_tracks_product_stock()
     {
-        $this->seed(RetailerWithProduct::class);
+        Mail::fake();
+        
+        $this->seed(RetailerWithProductSeeder::class);
 
         $this->assertFalse(Product::first()->inStock());
 
-        ClientFactory::shouldReceive('make->checkAvailability')
-            ->andReturn(new StockStatus($available = true, $price = 29900));
+        $this->mockClientRequest();
 
-        $this->artisan('track')
-            ->expectsOutput('All done!');
+        $this->artisan('track');
 
         $this->assertTrue(Product::first()->inStock());
     }

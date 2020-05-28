@@ -1,38 +1,28 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Unit;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-
-use App\Retailer;
 use App\Product;
-use App\Stock;
+use Tests\TestCase;
+use RetailerWithProductSeeder;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
-    /**
-     * @test
-     */
+    /** @test */
     public function it_checks_stock_for_products_at_retailers()
     {
-        $switch = Product::create(['name' => 'Nintendo Switch']);
+        $this->seed(RetailerWithProductSeeder::class);
 
-        $bestBuy = Retailer::create(['name' => 'BestBuy']);
+        tap(Product::first(), function ($product) {
+            $this->assertFalse($product->inStock());
 
-        $this->assertFalse($switch->inStock());
+            $product->stock()->first()->update(['in_stock' => true]);
 
-        $stock = new Stock([
-            'price' => 10000,
-            'url' => 'http://foo.com',
-            'sku' => '12345',
-            'in_stock' => true,
-        ]);
+            $this->assertTrue($product->inStock());
+        });
 
-        $bestBuy->addStock($switch, $stock);
-
-        $this->assertTrue($switch->inStock());
     }
 }
