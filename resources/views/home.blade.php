@@ -19,9 +19,6 @@
                     <a class="nav-link" href="{{ route('retailer.index') }}">View Retailers</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Add Retailer</a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" href="{{ route('product.index') }}">View Products</a>
                 </li>
                 <li class="nav-item">
@@ -29,6 +26,12 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">View Product History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('stock.index') }}">View Stock</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('stock.create') }}">Add Stock</a>
                 </li>
             </ul>
         </div>
