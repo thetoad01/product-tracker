@@ -16,7 +16,13 @@ class StockController extends Controller
      */
     public function index()
     {
-        //
+        $stock = Stock::with('product')
+            ->with('retailer')
+            ->get();
+
+        return view('stock.index', [
+            'stock' => $stock,
+        ]);
     }
 
     /**
@@ -91,7 +97,14 @@ class StockController extends Controller
      */
     public function show($id)
     {
-        //
+        $item = Stock::find($id)
+            ->with('product')
+            ->with('retailer')
+            ->first();
+
+        return view('stock.show', [
+            'item' => $item,
+        ]);
     }
 
     /**
