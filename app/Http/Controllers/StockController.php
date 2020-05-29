@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Product;
 use App\Retailer;
+use App\Stock;
 use Illuminate\Http\Request;
 
 class StockController extends Controller
@@ -56,7 +57,30 @@ class StockController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        $validated = $request->validate([
+            'retailer_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
+            'url' => 'required|url',
+            'sku' => 'required',
+            'price' => 'required|numeric',
+        ]);
+
+        $in_stock = isset($request->in_stock) ? true : false;
+
+        $stock = Stock::updateOrCreate(
+            [
+                'retailer_id' => $validated['retailer_id'],
+                'product_id' => $validated['product_id'],
+                'url' => $validated['url'],
+            ],
+            [
+                'sku' => $validated['sku'],
+                'price' => (int) ($validated['price'] * 100),
+                'in_stock' => $in_stock,
+            ]
+        );
+
+        return redirect()->route('product.show', $validated['product_id']);
     }
 
     /**
@@ -78,7 +102,28 @@ class StockController extends Controller
      */
     public function edit($id)
     {
-        //
+        $retailer_id = '';
+        $product_id = '';
+
+        if (request()->retailer_id) {
+            $retailer_id = request()->retailer_id;
+        }
+
+        if (request()->product_id) {
+            $product_id = request()->product_id;
+        }
+
+        // These needs to be helpers
+        $retailers = Retailer::select('id','name')->get()->unique()->sort();
+        $products = Product::select('id','name')->get()->unique()->sort();
+
+        $stock = Stock::find($id);
+        
+        return view('stock.edit', [
+            'retailers' => $retailers,
+            'products' => $products,
+            'stock' => $stock,
+        ]);
     }
 
     /**
@@ -90,7 +135,27 @@ class StockController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'retailer_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
+            'url' => 'required|url',
+            'sku' => 'required',
+            'price' => 'required|numeric',
+        ]);
+
+        $in_stock = isset($request->in_stock) ? true : false;
+
+        Stock::where('id', $id)
+            ->update([
+                'retailer_id' => $validated['retailer_id'],
+                'product_id' => $validated['product_id'],
+                'url' => $validated['url'],
+                'sku' => $validated['sku'],
+                'price' => (int) ($validated['price'] * 100),
+                'in_stock' => $in_stock,
+            ]);
+
+        return redirect()->route('product.show', $validated['product_id']);
     }
 
     /**
@@ -101,6 +166,10 @@ class StockController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $stock = Stock::find($id);
+
+        $stock->delete();
+
+        return redirect()->route('product.index');
     }
 }

@@ -18,9 +18,12 @@
                     <select class="form-control" id="retailer" name="retailer_id">
                         <option value="" selected>Select Retailer</option>
                         @foreach ($retailers as $retailer)
-                            <option value="{{ $retailer->id }}" @if ($retailer_id == $retailer->id) selected @endif>{{ $retailer->name }}</option>
+                            <option value="{{ $retailer->id }}" @if ($retailer_id == $retailer->id || old('retailer_id') == $retailer->id) selected @endif>{{ $retailer->name }}</option>
                         @endforeach
                     </select>
+                    @error('retailer_id')
+                        <div class="small text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
@@ -31,27 +34,39 @@
                             <option value="{{ $product->id }}" @if ($product_id == $product->id) selected @endif>{{ $product->name }}</option>
                         @endforeach
                     </select>
+                    @error('product_id')
+                        <div class="small text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="url">URL</label>
-                    <input type="text" name="url" id="url" class="form-control">
+                    <input type="text" name="url" id="url" class="form-control" value="{{ old('url') }}">
+                    @error('url')
+                        <div class="small text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="sku">SKU</label>
-                    <input type="text" name="sku" id="sku" class="form-control">
+                    <input type="text" name="sku" id="sku" class="form-control" value="{{ old('sku') }}">
+                    @error('sku')
+                        <div class="small text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="price">Price</label>
-                    <input type="text" name="price" id="price" class="form-control">
+                    <input type="text" name="price" id="price" class="form-control" value="{{ old('price') }}">
+                    @error('price')
+                        <div class="small text-danger">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <div class="form-group">
                     <div class="custom-control custom-switch">
                         <input type="checkbox" class="custom-control-input" id="inStock" name="in_stock">
-                        <label class="custom-control-label" for="inStock">Current In Stock?</label>
+                        <label class="custom-control-label" for="inStock">Currently In Stock?</label>
                     </div>
                 </div>
 

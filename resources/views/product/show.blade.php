@@ -41,7 +41,8 @@
                 <thead class="border-top-0">
                     <tr>
                         <th class="border-top-0">URL</th>
-                        <th class="border-top-0">In Stock</th>
+                        <th class="border-top-0 text-right">Price</th>
+                        <th class="border-top-0 text-right">In Stock</th>
                         <th class="border-top-0 text-right">Last Checked</th>
                         <th class="border-top-0"></th>
                     </tr>
@@ -50,10 +51,11 @@
                 @foreach ($product->stock as $item)
                     <tr>
                         <td>{{ $item->url }}</td>
-                        <td>{{ $item->in_stock ? 'Yes' : 'No' }}</td>
+                        <td class="text-right">{{ $item->price ? number_format($item->price / 100, 2) : 0 }}</td>
+                        <td class="text-right">{{ $item->in_stock ? 'Yes' : 'No' }}</td>
                         <td class="text-right">{{ ($item->updated_at)->toDayDateTimeString() }}</td>
                         <th class="text-right">
-                            <a href="#?{{ $item->id }}">Edit</a>
+                            <a href="{{ route('stock.edit', ['stock' => $item->id, 'product_id' => $product->id, 'retailer_id' => $item->retailer_id]) }}">Edit</a>
                         </th>
                     </tr>
                 @endforeach
