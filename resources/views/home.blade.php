@@ -22,7 +22,7 @@
                     <a class="nav-link" href="#">Add Retailer</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">View Products</a>
+                    <a class="nav-link" href="{{ route('product.index') }}">View Products</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Add Product</a>

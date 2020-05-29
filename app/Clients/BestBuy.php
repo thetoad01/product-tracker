@@ -9,7 +9,13 @@ class BestBuy implements Client
 {
     public function checkAvailability(Stock $stock): StockStatus
     {
-        $results = Http::get($this->endpoint($stock->sku))->json();
+        $results = Http::get($this->endpoint($stock->sku));
+
+        if ($results->status() != 200) {
+            dd('API error');
+        }
+
+        $results = $results->json();
 
         return new StockStatus(
             $results['onlineAvailability'],

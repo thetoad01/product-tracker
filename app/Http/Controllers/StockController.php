@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Retailer;
 use Illuminate\Http\Request;
 
-class RetailerController extends Controller
+class StockController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,11 +13,7 @@ class RetailerController extends Controller
      */
     public function index()
     {
-        $retailers = Retailer::get();
-
-        return view('retailer.index', [
-            'retailers' => $retailers,
-        ]);
+        //
     }
 
     /**
@@ -28,7 +23,13 @@ class RetailerController extends Controller
      */
     public function create()
     {
-        //
+        $product_id = '';
+
+        if (request()->product_id) {
+            $product_id = request()->product_id;
+        }
+
+        dd($product_id);
     }
 
     /**
@@ -50,11 +51,7 @@ class RetailerController extends Controller
      */
     public function show($id)
     {
-        $retailer = Retailer::find($id)
-            ->with('stock')
-            ->first();
-
-        dd($retailer);
+        //
     }
 
     /**

@@ -30,4 +30,6 @@ Route::get('/home', 'HomeController@index')->name('home');
 // Logged in users only
 Route::middleware('auth')->group(function () {
     Route::resource('retailer', 'RetailerController');
+    Route::resource('product', 'ProductController');
+    Route::resource('stock', 'StockController');
 });
