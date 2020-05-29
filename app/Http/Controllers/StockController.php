@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Product;
+use App\Retailer;
 use Illuminate\Http\Request;
 
 class StockController extends Controller
@@ -23,13 +25,27 @@ class StockController extends Controller
      */
     public function create()
     {
+        $retailer_id = '';
         $product_id = '';
+
+        if (request()->retailer_id) {
+            $retailer_id = request()->retailer_id;
+        }
 
         if (request()->product_id) {
             $product_id = request()->product_id;
         }
 
-        dd($product_id);
+        // These needs to be helpers
+        $retailers = Retailer::select('id','name')->get()->unique()->sort();
+        $products = Product::select('id','name')->get()->unique()->sort();
+
+        return view('stock.create', [
+            'retailers' => $retailers,
+            'products' => $products,
+            'retailer_id' => $retailer_id,
+            'product_id' => $product_id,
+        ]);
     }
 
     /**
@@ -40,7 +56,7 @@ class StockController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**
